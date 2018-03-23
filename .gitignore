@@ -1,0 +1,9 @@
+.idea
+node_modules
+coverage
+.nyc_output
+.DS_Store
+
+*.off
+*.log
+.yarn-integrity
