@@ -69,7 +69,7 @@ const defer = require('async-is-fun').defer
 
 ### delay
 
--   **See: [test/delay.js][8] For usage.**
+-   **See: [test/delayPromise.js][8] For usage.**
 
 Delays resolution of a Promise by [time] amount, resolving [value]
 
@@ -161,7 +161,7 @@ returned or resolved by the provided function. It will reject when all attempts 
 
 [7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[8]: test/delay.js
+[8]: test/delayPromise.js
 
 [9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
