@@ -7,13 +7,14 @@
 ### Node
 
 ``` shell
-
 yarn add async-is-fun
 // or
 npm install --save async-is-fun
 
-
 ```
+
+### Webpack
+
 
 
 
@@ -58,7 +59,7 @@ const defer = require('async-is-fun').defer
  }
 
  let later = new AsyncConstructor(defer())
- let evenLater = new new AsyncConstructor(defer())
+ let evenLater = new AsyncConstructor(defer())
 
  Promise.all([later.Promise, evenLater.Promise])
  .then((results)=>{
