@@ -20,12 +20,13 @@
 An overlooked pattern for Promise usage, returns An old school self contained deferred object.
  A good use of this is waiting for async instantiation in class constructors.
 
+Type: [object][6]
+
 **Properties**
 
--   `deferred` **[object][6]** 
-    -   `deferred.resolve` **function (any)** resolve the Promise with value.
-    -   `deferred.reject` **function (any)** reject the Promise with value.
-    -   `deferred.promise` **[Promise][7]&lt;any>** 
+-   `resolve` **function (any)** resolve the Promise with value.
+-   `reject` **function (any)** reject the Promise with value.
+-   `promise` **[Promise][7]** 
 
 **Examples**
 
@@ -56,6 +57,10 @@ const defer = require('async-is-fun').defer
 
 Delays resolution of a Promise by [time] amount, resolving [value]
 
+Yes, it is true that plenty of other libraries implement this method, but is included here
+because it is used internally and could save someone from having to load a 2nd bigger library
+like bluebird.
+
 **Parameters**
 
 -   `time` **[number][9]** in milliseconds
@@ -63,7 +68,7 @@ Delays resolution of a Promise by [time] amount, resolving [value]
 **Examples**
 
 ```javascript
-const delay = require('async-is-fun).delay
+const delay = require('async-is-fun').delay
 
 Promise.resolve('Wait for it')
 .then(delay(1000))
@@ -78,7 +83,50 @@ Returns **function (any)**
 
 Retry a Promise returning function
 
-Type: retryUntil
+Type: [function][10]
+
+**Parameters**
+
+-   `fun` **[function][10]** A promise or value returning function, values will be wrapped in a Promise.
+-   `config` **[object][6]?** The optional configuration object.
+    -   `config.timeout` **[object][6]** Initial timeout value before retry. (optional, default `250`)
+    -   `config.bound` **[object][6]** Upper bound of the computed timeout. (optional, default `1000`)
+    -   `config.growth` **[object][6]** Growth rate of the timeout per iteration. [src/growIt.js][11] (optional, default `0.2`)
+    -   `config.tries` **[object][6]** Number of attempts before the promise is rejected. (optional, default `10`)
+    -   `config.returnErrors` **[object][6]** Number of errors to report if [func] throws or rejects. (optional, default `5`)
+
+**Examples**
+
+```javascript
+const retryUntil = require('async-is-fun').retryUntil
+
+Promise.resolve({msg: 'Retry a bunch', value: 10})
+.then(retryUntil((value)=>{
+
+  //Value is passed through.
+  console.log(value) // {msg: 'Retry a bunch', value: 10}
+
+  return somePromiseReturningFun(9)
+  .then((count)=>{
+    console.log(count) // 9
+    let total = count + value
+
+    //If a truthy value is returned the promise will resolve with that value.
+    if(total === 15){
+      return {total: total}
+    }
+
+    //If we return false, the method will retry after the timout expires.
+    return false
+  })
+}))
+.then((result)=>{
+  console.log(result) // {total: 19}
+}
+```
+
+Returns **function (value)** Returns a Promise returning function that will resolve the first truthy value
+returned or resolved by the provided function. It will reject when all attempts are exhausted.
 
 [1]: #async-is-fun
 
@@ -97,3 +145,7 @@ Type: retryUntil
 [8]: test/delay.js
 
 [9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[11]: src/growIt.js
