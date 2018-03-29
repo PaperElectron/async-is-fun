@@ -6,7 +6,7 @@
 //  */
 
 "use strict"
-const delay = require('./src/delay')
+const delayPromise = require('./src/delay')
 /**
  *
  * @module async-is-fun
@@ -57,7 +57,7 @@ module.exports = {
    * @param {number} time - in milliseconds
    * @return {function(any)}
    *
-   * @see {@link test/delay.js} For usage.
+   * @see {@link test/delayPromise.js} For usage.
    * @example
    *
    * const delay = require('async-is-fun').delay
@@ -70,7 +70,7 @@ module.exports = {
    */
   delay: (time) => {
     return (value) => {
-      return delay(time, value)
+      return delayPromise(time, value)
     }
   },
 
